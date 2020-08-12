@@ -27,7 +27,7 @@ function setup() {
 
   makePyramid();
 
-  stone = new Stone(190, 110, 50);
+  stone = new Stone(190, 110, 50, 50);
 
   slingShot = new SlingShot(stone.body, {x: 220, y: 120});
 }
