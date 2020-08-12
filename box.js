@@ -20,6 +20,7 @@ class Box {
         push();
         translate(pos.x, pos.y);
         rotate(angle);
+        stroke(0, 0, 0);
         rect(0, 0, this.width, this.height);
         pop();
     }

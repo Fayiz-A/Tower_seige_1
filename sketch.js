@@ -16,38 +16,101 @@ var slingshot;
 var boxNumber = 1;
 var boxCorX = 750, boxCorY = 10, incrementBoxNumber = true;
 
+var mgr;
+var instructionsButton, gameButton;
+
 function setup() {
   createCanvas(1500, 700);
 
-  engine = Engine.create();
-  world = engine.world;
+  mgr = new SceneManager();
+  mgr.showScene(intro);
 
-  ground = new Ground(1000, 600, 700, 40);
-  bottomGround = new Ground(width/2, height, width, 20);
-
-  makePyramid();
-
-  stone = new Stone(190, 110, 50, 50);
-
-  slingShot = new SlingShot(stone.body, {x: 220, y: 120});
 }
 
 function draw() {
-  background(0);
-  Engine.update(engine);
 
-  rectMode(CENTER);
+  mgr.draw();
 
-  boxArray.forEach((item, index) => item.display("yellow"));
-  ground.display("brown");
-  bottomGround.display("brown");
-  
-  stone.display();
-
-  slingShot.display();
 }
 
-function makePyramid(){
+function drawGameScene() {
+
+  this.setup = function () {
+    createCanvas(1500, 700);
+
+    engine = Engine.create();
+    world = engine.world;
+
+    ground = new Ground(1000, 600, 700, 40);
+    bottomGround = new Ground(width / 2, height, width, 20);
+
+    makePyramid();
+
+    stone = new Stone(190, 110, 50, 50);
+
+    slingShot = new SlingShot(stone.body, { x: 220, y: 120 });
+  }
+
+  this.draw = function () {
+    background(0);
+    Engine.update(engine);
+
+    rectMode(CENTER);
+
+    boxArray.forEach((item, index) => item.display("yellow"));
+    ground.display("brown");
+    bottomGround.display("brown");
+
+    stone.display();
+
+    slingShot.display();
+  }
+
+  this.mouseDragged = function () {
+    Body.setPosition(stone.body, { x: mouseX, y: mouseY });
+  }
+
+  this.mouseReleased = function () {
+    slingShot.fly();
+  }
+
+  this.keyPressed = function () {
+    if (keyCode == 32) {
+      slingShot.attach(stone.body);
+    }
+  }
+
+}
+
+function intro() {
+
+  this.setup = function () {
+    createCanvas(1500, 700);
+
+    instructionsButton = new Button(350, 300, "HOW TO PLAY?");
+    gameButton = new Button(350, 600, "PLAY");
+  }
+
+  this.draw = function () {
+    background("teal")
+
+    gameButton.display();
+    instructionsButton.display();
+
+    gameButton.button.onRelease = function() {
+      mgr.wire();
+      mgr.showScene(drawGameScene);
+    }
+  
+    instructionsButton.button.onRelease = function() {
+      mgr.wire();
+      mgr.showScene(drawGameScene);
+    }
+
+  }
+}
+
+function makePyramid() {
   for (var row = 0; row < 9; row++) {
     boxCorY = 10;
     for (var column = 0; column < boxNumber; column++) {
@@ -67,18 +130,5 @@ function makePyramid(){
 
     boxCorX += 60;
   }
-}
 
-function mouseDragged() {
-  Body.setPosition(stone.body, {x: mouseX, y: mouseY});
-}
-
-function mouseReleased() {
-  slingShot.fly();
-}
-
-function keyPressed() {
-  if (keyCode == 32) {
-    slingShot.attach(stone.body);
-  }
 }
