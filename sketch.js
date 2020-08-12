@@ -16,8 +16,10 @@ var slingshot;
 var boxNumber = 1;
 var boxCorX = 750, boxCorY = 10, incrementBoxNumber = true;
 
-var mgr;
-var instructionsButton, gameButton;
+var mgr;//objectName for scene manager
+
+//buttons
+var instructionsButton, gameButton, backButton1, backButton2;
 
 function setup() {
   createCanvas(1500, 700);
@@ -41,8 +43,8 @@ function drawGameScene() {
     engine = Engine.create();
     world = engine.world;
 
-    ground = new Ground(1000, 600, 700, 40);
-    bottomGround = new Ground(width / 2, height, width, 20);
+    ground = new Ground(1000, 600, 700, 40, "brown");
+    bottomGround = new Ground(width / 2, height, width, 20, "brown");
 
     makePyramid();
 
@@ -57,9 +59,9 @@ function drawGameScene() {
 
     rectMode(CENTER);
 
-    boxArray.forEach((item, index) => item.display("yellow"));
-    ground.display("brown");
-    bottomGround.display("brown");
+    boxArray.forEach((item, index) => item.display());
+    ground.display();
+    bottomGround.display();
 
     stone.display();
 
@@ -97,24 +99,43 @@ function intro() {
     gameButton.display();
     instructionsButton.display();
 
-    gameButton.button.onRelease = function() {
-      mgr.wire();
-      mgr.showScene(drawGameScene);
-    }
-  
-    instructionsButton.button.onRelease = function() {
+    gameButton.button.onRelease = function () {
       mgr.wire();
       mgr.showScene(drawGameScene);
     }
 
+    instructionsButton.button.onRelease = function () {
+      mgr.wire();
+      mgr.showScene(displayRules);
+    }
+
   }
+}
+
+function displayRules() {
+  this.setup = function () {
+    createCanvas(1500, 700);
+
+    backButton1 = new Button(100, 100, "Back");
+
+  }
+
+  this.draw = function () {
+    backButton1.button.onRelease = function () {
+      mgr.showScene(intro);
+    }
+
+    backButton1.display();
+
+  }
+
 }
 
 function makePyramid() {
   for (var row = 0; row < 9; row++) {
     boxCorY = 10;
     for (var column = 0; column < boxNumber; column++) {
-      boxArray.push(new Box(boxCorX, boxCorY, 60, 60));
+      boxArray.push(new Box(boxCorX, boxCorY, 60, 60, [random(0, 255), random(0, 255), random(0, 255)]));
       boxCorY += 60;
     }
 
