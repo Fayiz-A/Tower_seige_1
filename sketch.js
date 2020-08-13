@@ -153,21 +153,6 @@ function displayRules() {
     displayText("HOW TO PLAY?", 600, 60, "yellow", 45, "timesNewRoman", "bold");
     displayText(information, 30, 140, "white", 25, "Gangsofthree");
   }
-
-  this.mouseDragged = function () {
-    Body.setPosition(stone.body, { x: mouseX, y: mouseY });
-  }
-
-  this.mouseReleased = function () {
-    slingShot.fly();
-  }
-
-  this.keyPressed = function () {
-    if (keyCode == 32) {
-      slingShot.attach(stone.body);
-    }
-  }
-
 }
 
 function makePyramid() {
