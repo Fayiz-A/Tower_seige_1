@@ -20,6 +20,9 @@ class Button {
     }
 
     display() {
+        push();
+        rectMode(CORNER);
         this.button.draw();
+        pop();
     }
 }
