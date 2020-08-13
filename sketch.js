@@ -27,6 +27,13 @@ var information = "The objective of this game is to hit the tower with the stone
 "Just stretch the band (not too much) where the stone is hung and release it. "+ 
 "The stone \nwill get launched."
 
+var stretch_sound;
+var timeStretched = 0;
+
+function preload() {
+  stretch_sound = loadSound("Stretch.mp3");
+}
+
 function setup() {
   createCanvas(1440, 822);
 
@@ -75,15 +82,22 @@ function drawGameScene() {
 
   this.mouseDragged = function () {
     Body.setPosition(stone.body, { x: mouseX, y: mouseY });
+    if(timeStretched < 1){
+      stretch_sound.play();
+      timeStretched++;
+    }
   }
 
   this.mouseReleased = function () {
     slingShot.fly();
+    
+    stretch_sound.stop();
   }
 
   this.keyPressed = function () {
     if (keyCode == 32) {
       slingShot.attach(stone.body);
+      timeStretched = 0;
     }
   }
 
