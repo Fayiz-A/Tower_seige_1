@@ -9,6 +9,7 @@ class Ground extends Box {
     }
 
     display() {
-        super.display();
+        fill(this.colour);
+        rect(this.body.position.x, this.body.position.y, this.width, this.height);
     }
 }
