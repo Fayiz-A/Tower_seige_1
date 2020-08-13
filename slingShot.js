@@ -22,13 +22,26 @@ class SlingShot {
 
     display() {
         if (this.sling.bodyA) {
-            var start = this.sling.bodyA.position;
-            var end = this.pointB;
+            if(this.sling.bodyA){
+                var pointA = this.sling.bodyA.position;
+                var pointB = this.pointB;
 
-            push();
-            stroke("yellow");
-            line(start.x, start.y, end.x, end.y);
-            pop();
+                push();
+                strokeWeight(4);
+                stroke("brown");
+                if(pointA.x < 250 && pointA.x > 200) {
+                    strokeWeight(7);
+                    line(pointA.x, pointA.y, pointB.x - 10, pointB.y);
+                    line(pointA.x, pointA.y, pointB.x + 30, pointB.y - 3);
+                }   
+                else {
+                    strokeWeight(3);
+                    line(pointA.x, pointA.y, pointB.x - 10, pointB.y);
+                    line(pointA.x, pointA.y, pointB.x + 30, pointB.y - 3);
+                }
+                pop();
+            }
+    
         }
     }
 }

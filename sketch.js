@@ -14,37 +14,49 @@ var stone;
 var slingshot;
 
 var boxNumber = 1;
-var boxCorX = 750, boxCorY = 10, incrementBoxNumber = true;
+var boxCorX = 822, boxCorY = 10, incrementBoxNumber = true;
 
 var mgr;//objectName for scene manager
 
 //buttons
 var instructionsButton, gameButton, backButton1, backButton2;
 
+var information = "The objective of this game is to hit the tower with the stone and make it fall. "+ 
+"You have only THREE STONES to do this. "+
+"\n\nThis game is played just like the angry birds game. "+  
+"Just stretch the band (not too much) where the stone is hung and release it. "+ 
+"The stone \nwill get launched."
+
+var stretch_sound;
+var timeStretched = 0;
+
+function preload() {
+  stretch_sound = loadSound("Stretch.mp3");
+}
+
 function setup() {
-  createCanvas(1500, 700);
+  createCanvas(1440, 822);
 
   mgr = new SceneManager();
   mgr.showScene(intro);
-
 }
 
 function draw() {
-
   mgr.draw();
-
 }
 
 function drawGameScene() {
 
   this.setup = function () {
-    createCanvas(1500, 700);
+    createCanvas(1440, 822);
 
     engine = Engine.create();
     world = engine.world;
 
-    ground = new Ground(1000, 600, 700, 40, "brown");
-    bottomGround = new Ground(width / 2, height, width, 20, "brown");
+    rectMode(CENTER);
+    imageMode(CENTER);
+    ground = new Ground(1000, 600, 750, 50, "brown");
+    bottomGround = new Ground(width / 2, height, width, 60, "brown");
 
     makePyramid();
 
@@ -70,15 +82,22 @@ function drawGameScene() {
 
   this.mouseDragged = function () {
     Body.setPosition(stone.body, { x: mouseX, y: mouseY });
+    if(timeStretched < 1){
+      stretch_sound.play();
+      timeStretched++;
+    }
   }
 
   this.mouseReleased = function () {
     slingShot.fly();
+    
+    stretch_sound.stop();
   }
 
   this.keyPressed = function () {
     if (keyCode == 32) {
       slingShot.attach(stone.body);
+      timeStretched = 0;
     }
   }
 
@@ -87,10 +106,10 @@ function drawGameScene() {
 function intro() {
 
   this.setup = function () {
-    createCanvas(1500, 700);
+    createCanvas(1440, 822);
 
-    instructionsButton = new Button(350, 300, "HOW TO PLAY?");
-    gameButton = new Button(350, 600, "PLAY");
+    gameButton = new Button(550, 300, "PLAY");
+    instructionsButton = new Button(550, 400, "HOW TO PLAY?");
   }
 
   this.draw = function () {
@@ -114,19 +133,39 @@ function intro() {
 
 function displayRules() {
   this.setup = function () {
-    createCanvas(1500, 700);
+    createCanvas(1440, 822);
 
-    backButton1 = new Button(100, 100, "Back");
+    engine = Engine.create();
+    world = engine.world;
 
+    backButton1 = new Button(20, 20, "Back");
   }
 
   this.draw = function () {
+    background(0);
+
+    backButton1.display();
+
     backButton1.button.onRelease = function () {
       mgr.showScene(intro);
     }
 
-    backButton1.display();
+    displayText("HOW TO PLAY?", 600, 60, "yellow", 45, "timesNewRoman", "bold");
+    displayText(information, 30, 140, "white", 25, "Gangsofthree");
+  }
 
+  this.mouseDragged = function () {
+    Body.setPosition(stone.body, { x: mouseX, y: mouseY });
+  }
+
+  this.mouseReleased = function () {
+    slingShot.fly();
+  }
+
+  this.keyPressed = function () {
+    if (keyCode == 32) {
+      slingShot.attach(stone.body);
+    }
   }
 
 }
