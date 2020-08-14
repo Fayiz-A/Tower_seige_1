@@ -26,16 +26,16 @@ var instructionsButton, gameButton, backButton1;
 
 //the information to be displayed on the how to play page
 var information = "The objective of this game is to hit the tower with the stone and make it fall. " +
-
+  "You have only THREE STONES to do this. " +
   "\n\nThis game is played just like the angry birds game. " +
   "Just stretch the band (not too much) where the stone is hung and release it. " +
   "The stone \nwill get launched. " +
-  "You can get another stone by Pressing the SPACE BAR. All the best!"
+  "You can get another stone by pressing the SPACE BAR. All the best!"
 
 var stretch_sound;
 var timeStretched = 0;
 
-
+var stonesRemaining = 2;
 function preload() {
   //loads the sound file
   stretch_sound = loadSound("Stretch.mp3");
@@ -112,6 +112,12 @@ function drawGameScene() {
       //if all the boxes have not fallen, it empties the array
       boxFallenArray = [];
     }
+
+    if(stonesRemaining < 0) { 
+        mgr.showScene( showLosingScreen );
+    }
+
+    displayText("Stones Remaining: " + stonesRemaining, 1050, 100, "white", 30);
   }
 
   this.mouseDragged = function () {
@@ -128,6 +134,7 @@ function drawGameScene() {
     slingShot.fly();
 
     stretch_sound.stop();
+
   }
 
   this.keyPressed = function () {
@@ -135,6 +142,8 @@ function drawGameScene() {
       //attaches the stone back when space is pressed
       slingShot.attach(stone.body);
       timeStretched = 0;
+
+      stonesRemaining--;
     }
   }
 
@@ -206,7 +215,18 @@ function showWinningScreen(){
   
     displayText("Yay! You won the game.", 600, 300, "black", 45, "GangsofThree");
   }
+}
 
+function showLosingScreen() {
+  this.setup = function () {
+    createCanvas(1440, 822);
+  }
+
+  this.draw = function () {
+    background("red");
+  
+    displayText("Oh! You lost the game.", 600, 300, "black", 45, "GangsofThree");
+  }
 }
 
 function makePyramid() {
