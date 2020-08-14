@@ -114,7 +114,7 @@ function drawGameScene() {
     }
 
     if(stonesRemaining < 0) { 
-        mgr.showScene( showLosingScreen );
+        mgr.showScene(showLosingScreen);
     }
 
     displayText("Stones Remaining: " + stonesRemaining, 1050, 100, "white", 30);
