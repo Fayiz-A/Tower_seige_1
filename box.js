@@ -21,7 +21,7 @@ class Box {
         var pos = this.body.position;
         var angle = this.body.angle;
 
-        if (pos.y < 750) {
+        if (pos.y < 700) {
             push();
             fill(this.colour);
             translate(pos.x, pos.y);
@@ -42,6 +42,17 @@ class Box {
             this.visibility -= 5;
             World.remove(world, this.body);
             pop();
+            this.checkVisibility();
         }
     }
+
+    checkVisibility(){
+        if(this.visibility === 5){
+            boxFallenArray.push(true);
+        }
+        else{
+            boxFallenArray.push(false);
+        }
+    }
+
 }
