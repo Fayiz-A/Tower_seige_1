@@ -13,17 +13,46 @@ class Box {
         this.height = height;
 
         this.colour = colour;
+
+        this.visibility = 255;
     }
+
     display() {
         var pos = this.body.position;
         var angle = this.body.angle;
 
-        fill(this.colour);
-        push();
-        translate(pos.x, pos.y);
-        rotate(angle);
-        stroke(0, 0, 0);
-        rect(0, 0, this.width, this.height);
-        pop();
+        if (pos.y < 700) {
+            push();
+            fill(this.colour);
+            translate(pos.x, pos.y);
+            rotate(angle);
+            stroke(0, 0, 0);
+            rect(0, 0, this.width, this.height);
+            pop();
+        }
+        else {
+            push();
+            this.boxColour = color(this.colour);
+            this.boxColour.setAlpha(this.visibility);
+            fill(this.boxColour);
+            translate(pos.x, pos.y);
+            rotate(angle);
+            noStroke();
+            rect(pos.x, pos.y, this.width, this.height);
+            this.visibility -= 5;
+            World.remove(world, this.body);
+            pop();
+            this.checkVisibility();
+        }
     }
+
+    checkVisibility(){
+        if(this.visibility === 5){
+            boxFallenArray.push(true);
+        }
+        else{
+            boxFallenArray.push(false);
+        }
+    }
+
 }
