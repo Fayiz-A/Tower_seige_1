@@ -206,6 +206,7 @@ function showWinningScreen(){
   
     displayText("Yay! You won the game.", 600, 300, "black", 45, "GangsofThree");
   }
+
 }
 
 function makePyramid() {
