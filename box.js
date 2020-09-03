@@ -55,4 +55,12 @@ class Box {
         }
     }
 
+    showScore() {
+        displayText('Score: ' + score, 1050, 50, 'red', 30);
+
+        if(this.visibility > 0 && this.visibility < 20){
+            score++;
+        }
+    }
+
 }

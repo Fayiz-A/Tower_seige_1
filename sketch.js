@@ -36,6 +36,10 @@ var stretch_sound;
 var timeStretched = 0;
 
 var stonesRemaining = 2;
+var score = 0;
+
+var colour = 'black';
+
 function preload() {
   //loads the sound file
   stretch_sound = loadSound("Stretch.mp3");
@@ -79,13 +83,16 @@ function drawGameScene() {
   }
 
   this.draw = function () {
+    fetchTime();//this function fetches the current time and changes the colour value according to it
 
-    background(0);
+    background(colour);
     Engine.update(engine);
     rectMode(CENTER);
 
     //displays all the objects
     boxArray.forEach((item, index) => item.display());//displays each box in the array;
+    boxArray.forEach((item, index) => item.showScore());//displays each box in the array;
+
     ground.display();
     bottomGround.display();
 
@@ -117,7 +124,7 @@ function drawGameScene() {
         mgr.showScene(showLosingScreen);
     }
 
-    displayText("Stones Remaining: " + stonesRemaining, 1050, 100, "white", 30);
+    displayText("Stones Remaining: " + stonesRemaining, 1050, 100, "red", 30);
   }
 
   this.mouseDragged = function () {
@@ -140,6 +147,7 @@ function drawGameScene() {
   this.keyPressed = function () {
     if (keyCode == 32) {
       //attaches the stone back when space is pressed
+      Body.setPosition(stone.body, {x: 220, y: 120});
       slingShot.attach(stone.body);
       timeStretched = 0;
 
@@ -214,6 +222,8 @@ function showWinningScreen(){
     background("yellow");
   
     displayText("Yay! You won the game.", 600, 300, "black", 45, "GangsofThree");
+    displayText('SCORE: ' + score, 1000, 30, 'yellow', 20, 'calibri', 'bold');
+
   }
 }
 
@@ -251,4 +261,20 @@ function makePyramid() {
     boxCorX += 60;
   }
 
+}
+
+async function fetchTime() {
+  var timeResponse = await fetch('http://worldtimeapi.org/api/timezone/Asia/Kolkata');//this gives a response of the current date and time in json
+  var timeJson = await timeResponse.json();
+  
+  var time = timeJson.datetime;
+  var hour = time.slice(11, 13);//this is used for slicing the string
+
+  if(hour > 06 && hour < 18) {
+    //makes the background white if it is daytime
+    colour = 'white';
+  } else {
+    //makes the background dark if it is night time.
+    colour = 'black';
+  }
 }
